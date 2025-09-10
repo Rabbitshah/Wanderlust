@@ -1,0 +1,536 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+<style>
+  .review-hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 2rem 0;
+    margin-bottom: 2rem;
+    color: white;
+  }
+
+  .review-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .review-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+  }
+
+  .review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #ebebeb;
+  }
+
+  .review-author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .author-avatar {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: #ff385c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 1.2rem;
+  }
+
+  .review-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .author-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #222222;
+  }
+
+  .review-date {
+    color: #717171;
+    font-size: 0.9rem;
+  }
+
+  .review-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .rating-stars {
+    color: #ff385c;
+    font-size: 1.2rem;
+  }
+
+  .rating-text {
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+
+  .review-title {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #222222;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+  }
+
+  .review-content {
+    color: #222222;
+    line-height: 1.8;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .review-details {
+    background: #f7f7f7;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #ebebeb;
+  }
+
+  .detail-item:last-child {
+    border-bottom: none;
+  }
+
+  .detail-label {
+    font-weight: 600;
+    color: #222222;
+  }
+
+  .detail-value {
+    color: #717171;
+  }
+
+  .listing-section {
+    background: #f7f7f7;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid #ff385c;
+  }
+
+  .listing-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .listing-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 0.5rem;
+    object-fit: cover;
+  }
+
+  .listing-info {
+    flex: 1;
+  }
+
+  .listing-title {
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: #222222;
+    margin-bottom: 0.25rem;
+  }
+
+  .listing-location {
+    color: #717171;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .listing-price {
+    color: #ff385c;
+    font-weight: 600;
+    font-size: 1.1rem;
+  }
+
+  .listing-description {
+    color: #222222;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .book-now-btn {
+    background: #ff385c;
+    color: white;
+    border: none;
+    border-radius: 2rem;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .book-now-btn:hover {
+    background: #e31c5f;
+    color: white;
+    text-decoration: none;
+  }
+
+  .view-listing-btn {
+    background: white;
+    color: #ff385c;
+    border: 2px solid #ff385c;
+    border-radius: 2rem;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .view-listing-btn:hover {
+    background: #ff385c;
+    color: white;
+    text-decoration: none;
+  }
+
+  .review-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #ebebeb;
+  }
+
+  .helpful-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid #ebebeb;
+    border-radius: 2rem;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+  }
+
+  .helpful-button:hover {
+    background: #f7f7f7;
+  }
+
+  .helpful-button.active {
+    background: #ff385c;
+    color: white;
+    border-color: #ff385c;
+  }
+
+  .verified-badge {
+    background: #4CAF50;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+  }
+
+  .featured-badge {
+    background: #FF9800;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+  }
+
+  .related-reviews {
+    margin-top: 3rem;
+  }
+
+  .related-reviews h3 {
+    margin-bottom: 1.5rem;
+    color: #222222;
+  }
+
+  .related-review-card {
+    background: white;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 1rem;
+    transition: transform 0.2s ease;
+  }
+
+  .related-review-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .related-review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .related-author {
+    font-weight: 600;
+    color: #222222;
+  }
+
+  .related-rating {
+    color: #ff385c;
+  }
+
+  .related-title {
+    font-weight: 600;
+    color: #222222;
+    margin-bottom: 0.5rem;
+  }
+
+  .related-content {
+    color: #717171;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .breadcrumb {
+    background: none;
+    padding: 0;
+    margin-bottom: 1rem;
+  }
+
+  .breadcrumb-item a {
+    color: #ff385c;
+    text-decoration: none;
+  }
+
+  .breadcrumb-item.active {
+    color: #717171;
+  }
+
+  @media (max-width: 768px) {
+    .review-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    
+    .listing-header {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .action-buttons {
+      flex-direction: column;
+    }
+    
+    .review-actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+</style>
+
+<!-- Hero Section -->
+<div class="review-hero">
+  <div class="container">
+    <div class="text-center">
+      <h1>Guest Review</h1>
+      <p>Detailed experience from our WanderLust community</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/">Home</a></li>
+      <li class="breadcrumb-item"><a href="/reviews">Reviews</a></li>
+      <li class="breadcrumb-item active">Review Details</li>
+    </ol>
+  </nav>
+
+  <div class="review-container">
+    <!-- Main Review Card -->
+    <div class="review-card">
+      <div class="review-header">
+        <div class="review-author">
+          <div class="author-avatar">
+            <%= review.author.username.charAt(0).toUpperCase() %>
+          </div>
+          <div class="review-meta">
+            <div class="author-name"><%= review.author.username %></div>
+            <div class="review-date">
+              Reviewed on <%= new Date(review.createdAt).toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+              }) %>
+            </div>
+          </div>
+          <% if (review.isVerified) { %>
+            <span class="verified-badge">Verified</span>
+          <% } %>
+          <% if (review.isFeatured) { %>
+            <span class="featured-badge">Featured</span>
+          <% } %>
+        </div>
+        <div class="review-rating">
+          <p class="starability-result" data-rating="<%= review.rating %>"></p>
+          <span class="visually-hidden">Rated <%= review.rating %> out of 5</span>
+        </div>
+      </div>
+      
+      <div class="review-title"><%= review.title %></div>
+      <div class="review-content"><%= review.comment %></div>
+      
+      <!-- Review Details -->
+      <div class="review-details">
+        <div class="detail-item">
+          <span class="detail-label">Experience Type:</span>
+          <span class="detail-value"><%= review.experienceType %></span>
+        </div>
+        <% if (review.stayDuration) { %>
+          <div class="detail-item">
+            <span class="detail-label">Stay Duration:</span>
+            <span class="detail-value"><%= review.stayDuration %> night(s)</span>
+          </div>
+        <% } %>
+        <div class="detail-item">
+          <span class="detail-label">Visit Date:</span>
+          <span class="detail-value"><%= new Date(review.visitDate).toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+          }) %></span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Helpful Votes:</span>
+          <span class="detail-value"><%= review.helpfulCount || 0 %></span>
+        </div>
+      </div>
+      
+      <!-- Review Actions -->
+      <div class="review-actions">
+        <button class="helpful-button" data-review-id="<%= review._id %>">
+          <i class="fa-solid fa-thumbs-up"></i>
+          <span class="helpful-count"><%= review.helpfulCount || 0 %></span>
+          <span>Helpful</span>
+        </button>
+        <a href="/reviews" class="btn btn-outline-primary">Back to Reviews</a>
+      </div>
+    </div>
+
+    <!-- Listing Section -->
+    <div class="listing-section">
+      <div class="listing-header">
+        <img src="<%= review.listing.image.url %>" alt="<%= review.listing.title %>" class="listing-image">
+        <div class="listing-info">
+          <div class="listing-title"><%= review.listing.title %></div>
+          <div class="listing-location"><%= review.listing.location %>, <%= review.listing.country %></div>
+          <div class="listing-price">₹<%= review.listing.price.toLocaleString('en-IN') %> / night</div>
+        </div>
+      </div>
+      
+      <div class="listing-description">
+        <%= review.listing.description %>
+      </div>
+      
+      <div class="action-buttons">
+        <a href="/listings/<%= review.listing._id %>" class="book-now-btn">
+          <i class="fa-solid fa-calendar-check"></i> Book Now
+        </a>
+        <a href="/listings/<%= review.listing._id %>" class="view-listing-btn">
+          <i class="fa-solid fa-eye"></i> View Listing
+        </a>
+      </div>
+    </div>
+
+    <!-- Related Reviews -->
+    <% if (relatedReviews.length > 0) { %>
+      <div class="related-reviews">
+        <h3>Other Reviews for this Listing</h3>
+        <% for(let relatedReview of relatedReviews) { %>
+          <div class="related-review-card">
+            <div class="related-review-header">
+              <div class="related-author"><%= relatedReview.author.username %></div>
+              <div class="related-rating">
+                <% for(let i = 1; i <= 5; i++) { %>
+                  <i class="fa-solid fa-star <%= i <= relatedReview.rating ? '' : 'fa-regular' %>"></i>
+                <% } %>
+                <%= relatedReview.rating %>.0
+              </div>
+            </div>
+            <div class="related-title"><%= relatedReview.title %></div>
+            <div class="related-content">
+              <%= relatedReview.comment.length > 150 ? relatedReview.comment.substring(0, 150) + '...' : relatedReview.comment %>
+            </div>
+            <a href="/reviews/<%= relatedReview._id %>" class="btn btn-sm btn-outline-primary mt-2">Read Full Review</a>
+          </div>
+        <% } %>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Helpful button functionality
+  const helpfulButton = document.querySelector('.helpful-button');
+  if (helpfulButton) {
+    helpfulButton.addEventListener('click', function() {
+      const reviewId = this.getAttribute('data-review-id');
+      const helpfulCount = this.querySelector('.helpful-count');
+      
+      fetch(`/reviews/${reviewId}/helpful`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        helpfulCount.textContent = data.helpfulCount;
+        if (data.isHelpful) {
+          this.classList.add('active');
+        } else {
+          this.classList.remove('active');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    });
+  }
+});
+</script>
+

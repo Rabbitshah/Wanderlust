@@ -4,8 +4,22 @@ const mapToken = process.env.MAP_TOKEN;
 const geocodingClient = mbxGeocoding({ accessToken: mapToken });
 
 module.exports.index = async (req, res) => {
-  const allListings = await Listing.find({});
-  res.render("listings/index.ejs", { allListings });
+  const { location } = req.query;
+
+  let searchQuery = {};
+
+  // Location search (search in title, location, country, and description)
+  if (location && location.trim() !== "") {
+    searchQuery.$or = [
+      { location: { $regex: location, $options: "i" } },
+      { country: { $regex: location, $options: "i" } },
+      { title: { $regex: location, $options: "i" } },
+      { description: { $regex: location, $options: "i" } },
+    ];
+  }
+
+  const allListings = await Listing.find(searchQuery);
+  res.render("listings/index.ejs", { allListings, searchLocation: location });
 };
 
 module.exports.renderNewForm = (req, res) => {
@@ -78,4 +92,51 @@ module.exports.deletedListing = async (req, res) => {
   req.flash("success", "Listing deleted!");
   // console.log(deletedListing);
   res.redirect("/listings");
+};
+
+module.exports.searchListings = async (req, res) => {
+  const { location, category, minPrice, maxPrice, guests } = req.query;
+
+  let searchQuery = {};
+
+  // Location search (search in title, location, country, and description)
+  if (location && location.trim() !== "") {
+    searchQuery.$or = [
+      { location: { $regex: location, $options: "i" } },
+      { country: { $regex: location, $options: "i" } },
+      { title: { $regex: location, $options: "i" } },
+      { description: { $regex: location, $options: "i" } },
+    ];
+  }
+
+  // Category filter
+  if (category && category !== "all") {
+    searchQuery.category = category;
+  }
+
+  // Price range filter
+  if (minPrice || maxPrice) {
+    searchQuery.price = {};
+    if (minPrice) searchQuery.price.$gte = parseInt(minPrice);
+    if (maxPrice) searchQuery.price.$lte = parseInt(maxPrice);
+  }
+
+  try {
+    const allListings = await Listing.find(searchQuery);
+
+    // If it's an AJAX request, return JSON
+    if (req.xhr || req.headers.accept.indexOf("json") > -1) {
+      return res.json({ listings: allListings });
+    }
+
+    // Otherwise render the page
+    res.render("listings/index.ejs", {
+      allListings,
+      searchParams: req.query,
+    });
+  } catch (error) {
+    console.error("Search error:", error);
+    req.flash("error", "Something went wrong with the search");
+    res.redirect("/listings");
+  }
 };

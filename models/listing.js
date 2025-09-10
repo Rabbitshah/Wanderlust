@@ -15,6 +15,37 @@ const listingSchema = new Schema({
   price: Number,
   location: String,
   country: String,
+  rating: {
+    type: Number,
+    default: 5.0,
+    min: 0,
+    max: 5
+  },
+  reviewCount: {
+    type: Number,
+    default: 0
+  },
+  category: {
+    type: String,
+    enum: [
+      "Trending",
+      "Rooms",
+      "Iconic Cities",
+      "Mountains",
+      "Castles",
+      "Camping",
+      "Farms",
+      "Arctic",
+      "Amazing Pools",
+      "Domes",
+      "Boats"
+    ],
+    default: "Rooms"
+  },
+  isGuestFavorite: {
+    type: Boolean,
+    default: false
+  },
   reviews: [
     {
       type: Schema.Types.ObjectId,
@@ -36,20 +67,6 @@ const listingSchema = new Schema({
       required: true,
     },
   },
-  // categories: {
-  //     type: String,
-  //     enum: [
-  //       "Trending",
-  //       "Rooms",
-  //       "Iconic Cities",
-  //       "Mountains",
-  //       "Castles",
-  //       "Camping",
-  //       "Farms",
-  //       "Arctic",
-  //       "Amazing Pools",
-  //     ],
-  //   }
 });
 
 listingSchema.post("findOneAndDelete", async (listing) => {

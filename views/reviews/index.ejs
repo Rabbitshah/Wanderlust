@@ -1,0 +1,534 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+<style>
+  .reviews-hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 3rem 0;
+    margin-bottom: 2rem;
+    color: white;
+  }
+
+  .reviews-stats {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ff385c;
+  }
+
+  .stat-label {
+    color: #717171;
+    font-size: 0.9rem;
+  }
+
+  .rating-distribution {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .rating-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .rating-label {
+    min-width: 60px;
+    font-weight: 600;
+  }
+
+  .rating-progress {
+    flex: 1;
+    height: 8px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .rating-fill {
+    height: 100%;
+    background: #ff385c;
+    transition: width 0.3s ease;
+  }
+
+  .rating-count {
+    min-width: 40px;
+    text-align: right;
+    font-size: 0.8rem;
+    color: #717171;
+  }
+
+  .filters-section {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+  }
+
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-select {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ebebeb;
+    border-radius: 0.5rem;
+    background: white;
+    font-size: 0.9rem;
+  }
+
+  .filter-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .review-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 1.5rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .review-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+
+  .review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+
+  .review-author {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .author-avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: #ff385c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.8rem;
+  }
+
+  .review-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .review-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #222222;
+    margin-bottom: 0.5rem;
+  }
+
+  .review-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .rating-stars {
+    color: #ff385c;
+  }
+
+  .review-date {
+    color: #717171;
+    font-size: 0.8rem;
+  }
+
+  .review-content {
+    color: #222222;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+
+  .listing-preview {
+    background: #f7f7f7;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-top: 1rem;
+    border-left: 4px solid #ff385c;
+  }
+
+  .listing-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .listing-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 0.5rem;
+    object-fit: cover;
+  }
+
+  .listing-info {
+    flex: 1;
+  }
+
+  .listing-title {
+    font-weight: 600;
+    color: #222222;
+    margin-bottom: 0.25rem;
+  }
+
+  .listing-location {
+    color: #717171;
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .listing-price {
+    color: #ff385c;
+    font-weight: 600;
+  }
+
+  .review-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #ebebeb;
+  }
+
+  .helpful-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid #ebebeb;
+    border-radius: 2rem;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+  }
+
+  .helpful-button:hover {
+    background: #f7f7f7;
+  }
+
+  .helpful-button.active {
+    background: #ff385c;
+    color: white;
+    border-color: #ff385c;
+  }
+
+  .book-now-btn {
+    background: #ff385c;
+    color: white;
+    border: none;
+    border-radius: 2rem;
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .book-now-btn:hover {
+    background: #e31c5f;
+    color: white;
+    text-decoration: none;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+  }
+
+  .page-link {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ebebeb;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    color: #222222;
+    transition: all 0.2s ease;
+  }
+
+  .page-link:hover {
+    background: #f7f7f7;
+    text-decoration: none;
+    color: #222222;
+  }
+
+  .page-link.active {
+    background: #ff385c;
+    color: white;
+    border-color: #ff385c;
+  }
+
+  .verified-badge {
+    background: #4CAF50;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+  }
+
+  .featured-badge {
+    background: #FF9800;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .filter-group {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    .review-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    
+    .listing-link {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+</style>
+
+<!-- Hero Section -->
+<div class="reviews-hero">
+  <div class="container">
+    <div class="text-center">
+      <h1>Guest Reviews & Experiences</h1>
+      <p>Discover what our guests have to say about their WanderLust adventures</p>
+    </div>
+  </div>
+</div>
+
+<!-- Statistics Section -->
+<div class="container">
+  <div class="reviews-stats">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="stat-card">
+          <div class="stat-number"><%= stats.averageRating.toFixed(1) %></div>
+          <div class="stat-label">Average Rating</div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="stat-card">
+          <div class="stat-number"><%= stats.totalReviews %></div>
+          <div class="stat-label">Total Reviews</div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="rating-distribution">
+          <% for(let i = 5; i >= 1; i--) { %>
+            <div class="rating-bar">
+              <div class="rating-label"><%= i %> stars</div>
+              <div class="rating-progress">
+                <div class="rating-fill" style="width: <%= stats.totalReviews > 0 ? (ratingDistribution[i] / stats.totalReviews * 100) : 0 %>%"></div>
+              </div>
+              <div class="rating-count"><%= ratingDistribution[i] %></div>
+            </div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters Section -->
+  <div class="filters-section">
+    <form method="GET" action="/reviews">
+      <div class="filter-group">
+        <select name="experienceType" class="filter-select">
+          <option value="">All Experiences</option>
+          <option value="Stays" <%= filters.experienceType === 'Stays' ? 'selected' : '' %>>Stays</option>
+          <option value="Experiences" <%= filters.experienceType === 'Experiences' ? 'selected' : '' %>>Experiences</option>
+          <option value="Activities" <%= filters.experienceType === 'Activities' ? 'selected' : '' %>>Activities</option>
+        </select>
+        
+        <select name="rating" class="filter-select">
+          <option value="">All Ratings</option>
+          <option value="5" <%= filters.rating === '5' ? 'selected' : '' %>>5 Stars</option>
+          <option value="4" <%= filters.rating === '4' ? 'selected' : '' %>>4+ Stars</option>
+          <option value="3" <%= filters.rating === '3' ? 'selected' : '' %>>3+ Stars</option>
+        </select>
+        
+        <div class="filter-checkbox">
+          <input type="checkbox" name="verified" value="true" id="verified" <%= filters.verified === 'true' ? 'checked' : '' %>>
+          <label for="verified">Verified Reviews</label>
+        </div>
+        
+        <div class="filter-checkbox">
+          <input type="checkbox" name="featured" value="true" id="featured" <%= filters.featured === 'true' ? 'checked' : '' %>>
+          <label for="featured">Featured Reviews</label>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Filter</button>
+        <a href="/reviews" class="btn btn-outline-primary">Clear</a>
+      </div>
+    </form>
+  </div>
+
+  <!-- Reviews List -->
+  <div class="reviews-list">
+    <% if (reviews.length === 0) { %>
+      <div class="text-center py-5">
+        <i class="fa-solid fa-search" style="font-size: 3rem; color: #717171; margin-bottom: 1rem;"></i>
+        <h3>No reviews found</h3>
+        <p>Try adjusting your filters or check back later for new reviews.</p>
+      </div>
+    <% } else { %>
+      <% for(let review of reviews) { %>
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-author">
+              <div class="author-avatar">
+                <%= review.author.username.charAt(0).toUpperCase() %>
+              </div>
+              <div class="review-meta">
+                <div class="author-name"><%= review.author.username %></div>
+                <div class="review-date"><%= new Date(review.createdAt).toLocaleDateString() %></div>
+              </div>
+              <% if (review.isVerified) { %>
+                <span class="verified-badge">Verified</span>
+              <% } %>
+              <% if (review.isFeatured) { %>
+                <span class="featured-badge">Featured</span>
+              <% } %>
+            </div>
+            <div class="review-rating">
+              <p class="starability-result" data-rating="<%= review.rating %>"></p>
+              <span class="visually-hidden">Rated <%= review.rating %> out of 5</span>
+            </div>
+          </div>
+          
+          <div class="review-title"><%= review.title %></div>
+          <div class="review-content"><%= review.comment %></div>
+          
+          <!-- Listing Preview -->
+          <div class="listing-preview">
+            <a href="/listings/<%= review.listing._id %>" class="listing-link">
+              <img src="<%= review.listing.image.url %>" alt="<%= review.listing.title %>" class="listing-image">
+              <div class="listing-info">
+                <div class="listing-title"><%= review.listing.title %></div>
+                <div class="listing-location"><%= review.listing.location %>, <%= review.listing.country %></div>
+                <div class="listing-price">₹<%= review.listing.price.toLocaleString('en-IN') %> / night</div>
+              </div>
+              <div class="book-now-btn">Book Now</div>
+            </a>
+          </div>
+          
+          <div class="review-actions">
+            <button class="helpful-button" data-review-id="<%= review._id %>">
+              <i class="fa-solid fa-thumbs-up"></i>
+              <span class="helpful-count"><%= review.helpfulCount || 0 %></span>
+              <span>Helpful</span>
+            </button>
+            <a href="/reviews/<%= review._id %>" class="btn btn-outline-primary">Read Full Review</a>
+          </div>
+        </div>
+      <% } %>
+    <% } %>
+  </div>
+
+  <!-- Pagination -->
+  <% if (totalPages > 1) { %>
+    <div class="pagination">
+      <% if (currentPage > 1) { %>
+        <a href="/reviews?page=<%= currentPage - 1 %><%= Object.keys(filters).map(key => `&${key}=${filters[key]}`).join('') %>" class="page-link">
+          <i class="fa-solid fa-chevron-left"></i> Previous
+        </a>
+      <% } %>
+      
+      <% for(let i = Math.max(1, currentPage - 2); i <= Math.min(totalPages, currentPage + 2); i++) { %>
+        <a href="/reviews?page=<%= i %><%= Object.keys(filters).map(key => `&${key}=${filters[key]}`).join('') %>" 
+           class="page-link <%= i === currentPage ? 'active' : '' %>">
+          <%= i %>
+        </a>
+      <% } %>
+      
+      <% if (currentPage < totalPages) { %>
+        <a href="/reviews?page=<%= currentPage + 1 %><%= Object.keys(filters).map(key => `&${key}=${filters[key]}`).join('') %>" class="page-link">
+          Next <i class="fa-solid fa-chevron-right"></i>
+        </a>
+      <% } %>
+    </div>
+  <% } %>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Helpful button functionality
+  document.querySelectorAll('.helpful-button').forEach(button => {
+    button.addEventListener('click', function() {
+      const reviewId = this.getAttribute('data-review-id');
+      const helpfulCount = this.querySelector('.helpful-count');
+      
+      fetch(`/reviews/${reviewId}/helpful`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        helpfulCount.textContent = data.helpfulCount;
+        if (data.isHelpful) {
+          this.classList.add('active');
+        } else {
+          this.classList.remove('active');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    });
+  });
+});
+</script>
+
