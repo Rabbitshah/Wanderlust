@@ -1,4 +1,6 @@
 const User = require("../models/user.js");
+const Booking = require("../models/booking.js");
+const Listing = require("../models/listing.js");
 
 module.exports.renderSignupForm = (req, res) => {
   res.render("users/signup.ejs");
@@ -42,4 +44,26 @@ module.exports.logoutPage = (req, res) => {
     req.flash("success", "You have logged out!");
     res.redirect("/listings");
   });
+};
+
+module.exports.profilePage = async (req, res) => {
+  const user = await User.findById(req.user._id).populate("favorites");
+  const myListings = await Listing.find({ owner: req.user._id });
+  const myBookings = await Booking.find({
+    user: req.user._id,
+    status: "confirmed",
+  })
+    .populate("listing")
+    .sort({ createdAt: -1 })
+    .limit(3);
+
+  res.render("users/profile.ejs", { user, myListings, myBookings });
+};
+
+module.exports.bookingsPage = async (req, res) => {
+  const bookings = await Booking.find({ user: req.user._id })
+    .populate("listing")
+    .sort({ createdAt: -1 });
+
+  res.render("users/bookings.ejs", { bookings });
 };

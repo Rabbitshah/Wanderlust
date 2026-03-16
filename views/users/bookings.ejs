@@ -1,0 +1,118 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+<style>
+  .bookings-page {
+    padding: 3rem 0 4rem;
+    background: #ffffff;
+  }
+
+  .bookings-shell {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .bookings-list {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .booking-row {
+    background: #ffffff;
+    border: 1px solid #ebebeb;
+    border-radius: 1.5rem;
+    padding: 1.25rem;
+    display: grid;
+    grid-template-columns: 180px 1fr auto;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .booking-row img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 1rem;
+  }
+
+  .booking-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    border-radius: 999px;
+    padding: 0.35rem 0.7rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .booking-status--confirmed {
+    background: #e8f7ee;
+    color: #1f7a47;
+  }
+
+  .booking-status--cancelled {
+    background: #fdecec;
+    color: #b42318;
+  }
+
+  @media (max-width: 768px) {
+    .booking-row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<div class="bookings-page">
+  <div class="bookings-shell">
+    <div class="d-flex justify-content-between align-items-center mb-4" data-animate="fade-up">
+      <div>
+        <h1 class="mb-1">My bookings</h1>
+        <p class="text-muted mb-0">Track upcoming stays and past reservations</p>
+      </div>
+      <a href="/listings" class="btn btn-outline-dark rounded-pill">Explore more stays</a>
+    </div>
+
+    <% if (bookings.length > 0) { %>
+      <div class="bookings-list">
+        <% bookings.forEach((booking, index) => { %>
+          <div class="booking-row hover-float" data-animate="fade-up" style="--reveal-delay: <%= Math.min(index * 0.05, 0.25) %>s;">
+            <img src="<%= booking.listing.image.url %>" alt="<%= booking.listing.title %>">
+            <div>
+              <div class="mb-2">
+                <span class="booking-status booking-status--<%= booking.status %>">
+                  <%= booking.status %>
+                </span>
+              </div>
+              <h2 class="h5 mb-1"><%= booking.listing.title %></h2>
+              <p class="text-muted mb-2"><%= booking.listing.location %>, <%= booking.listing.country %></p>
+              <p class="mb-1">
+                <strong>Dates:</strong>
+                <%= new Date(booking.checkIn).toLocaleDateString() %> -
+                <%= new Date(booking.checkOut).toLocaleDateString() %>
+              </p>
+              <p class="mb-1"><strong>Guests:</strong> <%= booking.guests %></p>
+              <p class="mb-0"><strong>Total:</strong> $<%= Number(booking.totalPrice).toLocaleString("en-US") %></p>
+            </div>
+            <div class="d-flex flex-column gap-2">
+              <a href="/listings/<%= booking.listing._id %>" class="btn btn-outline-dark rounded-pill">View listing</a>
+              <% if (booking.status === "confirmed") { %>
+                <form action="/bookings/<%= booking._id %>?_method=DELETE" method="POST">
+                  <button type="submit" class="btn btn-outline-danger rounded-pill w-100" onclick="return confirm('Cancel this booking?')">
+                    Cancel booking
+                  </button>
+                </form>
+              <% } %>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="text-center py-5" data-animate="zoom-in">
+        <i class="fa-regular fa-calendar-xmark fa-3x text-muted mb-3"></i>
+        <h2>No bookings yet</h2>
+        <p class="text-muted mb-4">Once you reserve a stay, it will show up here.</p>
+        <a href="/listings" class="btn btn-primary rounded-pill">Find a stay</a>
+      </div>
+    <% } %>
+  </div>
+</div>

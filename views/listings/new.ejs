@@ -1,85 +1,264 @@
 <% layout("/layouts/boilerplate.ejs") %>
-<div class="row mt-3">
-  <div class="col-8 offset-2">
-    <h3>Create a New Listing</h3>
-    <form
-      action="/listings"
-      method="post"
-      class="needs-validation"
-      novalidate
-      enctype="multipart/form-data"
-    >
-      <div class="mb-3">
-        <label for="title" class="form-label">Title</label>
-        <input
-          name="listing[title]"
-          type="text"
-          placeholder="Enter title"
-          class="form-control"
-          required
-        />
-        <div class="invalid-feedback">Please enter the title.</div>
-        <div class="valid-feedback">The title looks good!</div>
-      </div>
 
-      <div class="mb-3">
-        <label for="description" class="form-label">Description</label>
-        <textarea
-          name="listing[description]"
-          class="form-control"
-          required
-        ></textarea>
-        <div class="invalid-feedback">Please enter a short description.</div>
-      </div>
+<style>
+  .listing-form-page {
+    background: linear-gradient(180deg, #f7f7f7 0%, #ffffff 100%);
+    padding: 3rem 0 4rem;
+  }
 
-      <div class="mb-3">
-        <label for="image" class="form-label">Upload Listing image</label>
-        <input
-          name="listing[image]"
-          type="file"
-          class="form-control"
-          required
-        />
-      </div>
+  .listing-form-shell {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
 
-      <div class="row">
-        <div class="mb-3 col-md-4">
-          <label for="price" class="form-label">Price</label>
+  .listing-form-header {
+    margin-bottom: 2rem;
+  }
+
+  .listing-form-header h1 {
+    margin: 0 0 0.55rem;
+    font-size: 2.8rem;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    color: #222222;
+  }
+
+  .listing-form-header p {
+    margin: 0;
+    font-size: 1.15rem;
+    color: #717171;
+  }
+
+  .listing-form-card {
+    background: #ffffff;
+    border-radius: 2rem;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+    padding: 2.2rem;
+  }
+
+  .listing-form .form-label {
+    font-weight: 600;
+    color: #222222;
+    margin-bottom: 0.6rem;
+  }
+
+  .listing-form .form-control,
+  .listing-form .form-select {
+    border-radius: 1rem;
+    padding: 0.95rem 1rem;
+  }
+
+  .listing-form textarea.form-control {
+    min-height: 150px;
+  }
+
+  .upload-dropzone {
+    border: 2px dashed #ebebeb;
+    border-radius: 1rem;
+    padding: 2.5rem 1rem;
+    text-align: center;
+    transition: border-color 0.2s ease;
+  }
+
+  .upload-dropzone:hover {
+    border-color: #ff385c;
+  }
+
+  .upload-dropzone i {
+    font-size: 2.4rem;
+    color: #717171;
+    margin-bottom: 0.9rem;
+  }
+
+  .upload-dropzone p {
+    margin: 0;
+    color: #222222;
+  }
+
+  .upload-dropzone small {
+    display: block;
+    color: #717171;
+    margin-top: 0.4rem;
+  }
+
+  .listing-form-actions {
+    display: flex;
+    gap: 1rem;
+    padding-top: 1rem;
+  }
+
+  .listing-form-actions .btn {
+    flex: 1;
+    border-radius: 1rem;
+    padding: 1rem 1.25rem;
+    font-weight: 700;
+  }
+
+  .listing-form-actions .btn-outline-dark:hover {
+    background: #f7f7f7;
+    color: #222222;
+  }
+
+  .listing-form-actions .btn-primary {
+    background: #ff385c;
+    border-color: #ff385c;
+  }
+
+  .listing-form-actions .btn-primary:hover {
+    background: #e31c5f;
+    border-color: #e31c5f;
+  }
+</style>
+
+<div class="listing-form-page">
+  <div class="listing-form-shell">
+    <div class="listing-form-header" data-animate="fade-up">
+      <h1>List your space</h1>
+      <p>Share your property with travelers from around the world</p>
+    </div>
+
+    <div class="listing-form-card" data-animate="zoom-in" style="--reveal-delay: 0.08s;">
+      <form
+        action="/listings"
+        method="post"
+        class="listing-form needs-validation"
+        novalidate
+        enctype="multipart/form-data"
+      >
+        <div class="mb-4">
+          <label for="title" class="form-label">Title</label>
           <input
-            name="listing[price]"
-            placeholder="Enter price"
-            class="form-control"
-            required
-          />
-          <div class="invalid-feedback">Price should be valid.</div>
-        </div>
-
-        <div class="mb-3 col-md-8">
-          <label for="country" class="form-label">Country</label>
-          <input
-            name="listing[country]"
+            id="title"
+            name="listing[title]"
             type="text"
-            placeholder="Enter country"
+            placeholder="Give your listing a catchy title"
             class="form-control"
             required
           />
-          <div class="invalid-feedback">Country name should be valid.</div>
+          <div class="invalid-feedback">Please enter a title.</div>
         </div>
-      </div>
 
-      <div class="mb-3">
-        <label for="location" class="form-label">Location</label>
-        <input
-          name="listing[location]"
-          type="text"
-          placeholder="Enter location"
-          class="form-control"
-          required
-        />
-        <div class="invalid-feedback">Location should be valid.</div>
-      </div>
+        <div class="mb-4">
+          <label for="description" class="form-label">Description</label>
+          <textarea
+            id="description"
+            name="listing[description]"
+            class="form-control"
+            placeholder="Describe your space and what makes it special..."
+            required
+          ></textarea>
+          <div class="invalid-feedback">Please enter a description.</div>
+        </div>
 
-      <button type="submit" class="btn btn-dark add-btn mt-3">Add</button>
-    </form>
+        <div class="mb-4">
+          <label for="category" class="form-label">Category</label>
+          <select id="category" name="listing[category]" class="form-select" required>
+            <option value="">Select a category</option>
+            <option value="Trending">Trending</option>
+            <option value="Rooms">Rooms</option>
+            <option value="Iconic Cities">Iconic Cities</option>
+            <option value="Mountains">Mountains</option>
+            <option value="Castles">Castles</option>
+            <option value="Camping">Camping</option>
+            <option value="Farms">Farms</option>
+            <option value="Arctic">Arctic</option>
+            <option value="Amazing Pools">Amazing Pools</option>
+            <option value="Domes">Domes</option>
+            <option value="Boats">Boats</option>
+          </select>
+        </div>
+
+        <div class="row g-4 mb-4">
+          <div class="col-md-4">
+            <label for="maxGuests" class="form-label">Guests</label>
+            <input id="maxGuests" name="listing[maxGuests]" type="number" class="form-control" min="1" value="4" required />
+          </div>
+          <div class="col-md-4">
+            <label for="bedrooms" class="form-label">Bedrooms</label>
+            <input id="bedrooms" name="listing[bedrooms]" type="number" class="form-control" min="0" value="2" required />
+          </div>
+          <div class="col-md-4">
+            <label for="bathrooms" class="form-label">Bathrooms</label>
+            <input id="bathrooms" name="listing[bathrooms]" type="number" class="form-control" min="0" value="2" required />
+          </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+          <div class="col-md-6">
+            <label for="country" class="form-label">Country</label>
+            <input
+              id="country"
+              name="listing[country]"
+              type="text"
+              placeholder="United States"
+              class="form-control"
+              required
+            />
+            <div class="invalid-feedback">Please enter a country.</div>
+          </div>
+
+          <div class="col-md-6">
+            <label for="location" class="form-label">City/Location</label>
+            <input
+              id="location"
+              name="listing[location]"
+              type="text"
+              placeholder="New York, NY"
+              class="form-control"
+              required
+            />
+            <div class="invalid-feedback">Please enter a location.</div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label for="price" class="form-label">Price per night (USD)</label>
+          <input
+            id="price"
+            name="listing[price]"
+            type="number"
+            placeholder="150"
+            class="form-control"
+            min="1"
+            required
+          />
+          <div class="invalid-feedback">Please enter a valid price.</div>
+        </div>
+
+        <div class="mb-4">
+          <label for="amenities" class="form-label">Amenities</label>
+          <input
+            id="amenities"
+            name="listing[amenities]"
+            type="text"
+            class="form-control"
+            placeholder="WiFi, Kitchen, Parking, TV"
+          />
+        </div>
+
+        <div class="mb-4">
+          <label for="image" class="form-label">Images</label>
+          <div class="upload-dropzone">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            <p>Click to upload images</p>
+            <small>PNG, JPG up to 10MB</small>
+          </div>
+          <input
+            id="image"
+            name="listing[images]"
+            type="file"
+            class="form-control mt-3"
+            multiple
+            required
+          />
+        </div>
+
+        <div class="listing-form-actions">
+          <a href="/listings" class="btn btn-outline-dark">Cancel</a>
+          <button type="submit" class="btn btn-primary">Publish Listing</button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>

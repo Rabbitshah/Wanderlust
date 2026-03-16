@@ -255,6 +255,29 @@ document.addEventListener("DOMContentLoaded", function () {
     observer.observe(listing);
   });
 
+  // Generic reveal animations for redesigned pages
+  const animatedElements = document.querySelectorAll("[data-animate]");
+  if (animatedElements.length > 0) {
+    const revealObserver = new IntersectionObserver(
+      function (entries) {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.12,
+        rootMargin: "0px 0px -40px 0px",
+      }
+    );
+
+    animatedElements.forEach((element) => {
+      revealObserver.observe(element);
+    });
+  }
+
   // Toast notification system
   function showToast(message, type = "info") {
     const toast = document.createElement("div");

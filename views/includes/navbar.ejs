@@ -1,182 +1,241 @@
 <style>
-  .navbar {
-    height: 5rem;
-    background-color: white;
+  .site-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(14px);
     border-bottom: 1px solid #ebebeb;
-    padding: 0 2rem;
   }
 
-  .navbar-brand {
-    font-size: 1.5rem;
+  .site-navbar__inner {
+    max-width: 2520px;
+    margin: 0 auto;
+    padding: 1.35rem 2rem;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .site-navbar__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+    text-decoration: none;
+    color: #222222;
     font-weight: 600;
-    color: #ff385c !important;
+    font-size: 1.85rem;
+    justify-self: start;
   }
 
-  .nav-tabs {
-    border: none;
-    margin-left: 2rem;
-  }
-
-  .nav-tabs .nav-link {
-    border: none;
+  .site-navbar__brand:hover {
     color: #222222;
-    font-weight: 500;
-    padding: 1rem 1.5rem;
-    margin-right: 0.5rem;
   }
 
-  .nav-tabs .nav-link.active {
+  .brand-mark {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 999px;
+    border: 2px solid #ff385c;
+    color: #ff385c;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+  }
+
+  .brand-wordmark {
+    font-size: 1.9rem;
+    letter-spacing: -0.04em;
+  }
+
+  .site-navbar__tabs {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.75rem;
+    justify-self: center;
+  }
+
+  .site-navbar__tab {
+    color: #6b7280;
+    text-decoration: none;
+    font-weight: 600;
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid transparent;
+  }
+
+  .site-navbar__tab:hover,
+  .site-navbar__tab.is-active {
     color: #222222;
-    border-bottom: 2px solid #222222;
+    border-bottom-color: #222222;
+  }
+
+  .site-navbar__actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1.5rem;
+    justify-self: end;
+  }
+
+  .site-navbar__link,
+  .site-navbar__button {
+    color: #222222;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.98rem;
+  }
+
+  .site-navbar__button {
+    border: none;
     background: none;
   }
 
-  .nav-tabs .nav-link:hover {
-    border-bottom: 2px solid #ebebeb;
+  .site-navbar__host {
+    white-space: nowrap;
   }
 
-  .user-controls {
+  .site-navbar__auth {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1.5rem;
   }
 
-  .user-controls .nav-link {
-    color: #222222;
-    font-weight: 500;
-    padding: 0.5rem 1rem;
-    border-radius: 2rem;
-    transition: background-color 0.2s;
-  }
-
-  .user-controls .nav-link:hover {
-    background-color: #f7f7f7;
-  }
-
-  .user-controls .btn-primary {
-    background-color: #ff385c;
-    border: none;
-    border-radius: 2rem;
-    padding: 0.5rem 1rem;
-    font-weight: 500;
-  }
-
-  .user-controls .btn-primary:hover {
-    background-color: #e31c5f;
-  }
-
-  .user-menu {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem;
-    border: 1px solid #ebebeb;
-    border-radius: 2rem;
-    cursor: pointer;
-    transition: box-shadow 0.2s;
+  .site-navbar__menu {
     position: relative;
   }
 
-  .user-menu:hover {
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  .site-navbar__menu-trigger {
+    border: 1px solid #dcdcdc;
+    background: #fff;
+    border-radius: 999px;
+    padding: 0.4rem 0.5rem 0.4rem 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
   }
 
-  .user-avatar {
+  .site-navbar__menu-trigger:hover {
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.12);
+  }
+
+  .site-navbar__avatar {
     width: 2rem;
     height: 2rem;
-    border-radius: 50%;
-    background-color: #ff385c;
-    display: flex;
+    border-radius: 999px;
+    background: #ff385c;
+    color: #fff;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: white;
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 0.9rem;
   }
 
-  .user-dropdown {
+  .site-navbar__dropdown {
     position: absolute;
-    top: 100%;
+    top: calc(100% + 0.8rem);
     right: 0;
-    background: white;
+    min-width: 220px;
+    background: #fff;
     border: 1px solid #ebebeb;
-    border-radius: 1rem;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    min-width: 200px;
-    z-index: 1000;
+    border-radius: 1.25rem;
+    box-shadow: 0 18px 35px rgba(15, 23, 42, 0.16);
+    padding: 0.5rem;
     display: none;
-    margin-top: 0.5rem;
   }
 
-  .user-dropdown.show {
+  .site-navbar__dropdown.show {
     display: block;
   }
 
-  .dropdown-item {
-    padding: 0.75rem 1rem;
-    color: #222222;
-    text-decoration: none;
+  .site-navbar__dropdown a {
     display: block;
-    transition: background-color 0.2s;
-  }
-
-  .dropdown-item:hover {
-    background-color: #f7f7f7;
-    text-decoration: none;
+    padding: 0.8rem 0.95rem;
+    border-radius: 0.9rem;
     color: #222222;
+    text-decoration: none;
+    font-weight: 500;
   }
 
-  .dropdown-divider {
+  .site-navbar__dropdown a:hover {
+    background: #f7f7f7;
+  }
+
+  .site-navbar__divider {
     height: 1px;
-    background-color: #ebebeb;
-    margin: 0.5rem 0;
+    background: #ebebeb;
+    margin: 0.45rem 0;
+  }
+
+  @media (max-width: 992px) {
+    .site-navbar__inner {
+      grid-template-columns: 1fr;
+      justify-items: center;
+      text-align: center;
+      padding: 1rem 1.25rem;
+    }
+
+    .site-navbar__brand,
+    .site-navbar__actions {
+      justify-self: center;
+    }
+
+    .site-navbar__actions {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .site-navbar__tabs {
+      gap: 1rem;
+    }
+
+    .brand-wordmark {
+      font-size: 1.55rem;
+    }
+
+    .site-navbar__actions {
+      gap: 1rem;
+    }
   }
 </style>
 
-<nav class="navbar navbar-expand-lg">
-  <div class="container-fluid">
-    <!-- Logo -->
-    <a class="navbar-brand" href="/listings">
-      <i class="fa-regular fa-compass"></i> WanderLust
+<nav class="site-navbar">
+  <div class="site-navbar__inner">
+    <a class="site-navbar__brand" href="/listings">
+      <span class="brand-mark">
+        <i class="fa-regular fa-compass"></i>
+      </span>
+      <span class="brand-wordmark">Wanderlust</span>
     </a>
 
-    <!-- Navigation Tabs -->
-    <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <a class="nav-link active" href="/listings">Stays</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Experiences</a>
-      </li>
-    </ul>
+    <div class="site-navbar__tabs">
+      <a class="site-navbar__tab is-active" href="/listings">Stays</a>
+      <a class="site-navbar__tab" href="#">Experiences</a>
+    </div>
 
-    <!-- User Controls -->
-    <div class="user-controls">
+    <div class="site-navbar__actions">
+      <a class="site-navbar__link site-navbar__host" href="/listings/new">Wanderlust your home</a>
       <% if (!currentUser) { %>
-        <a class="nav-link" href="/listings/new">WanderLust your home</a>
-        <a class="btn btn-primary" href="/signup">Sign up</a>
-        <a class="nav-link" href="/login">Log in</a>
-      <% } %>
-      <% if (currentUser) { %>
-        <a class="nav-link" href="/listings/new">WanderLust your home</a>
-        <div class="user-menu" onclick="toggleDropdown()">
-          <i class="fa-solid fa-bars"></i>
-          <div class="user-avatar">
-            <%= currentUser.username.charAt(0).toUpperCase() %>
-          </div>
-          <div class="user-dropdown" id="userDropdown">
-            <a href="/profile" class="dropdown-item">
-              <i class="fa-solid fa-user"></i> Profile
-            </a>
-            <a href="/bookings" class="dropdown-item">
-              <i class="fa-solid fa-calendar"></i> My Bookings
-            </a>
-            <a href="/listings/new" class="dropdown-item">
-              <i class="fa-solid fa-plus"></i> Add Listing
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="/logout" class="dropdown-item">
-              <i class="fa-solid fa-sign-out-alt"></i> Log out
-            </a>
+        <div class="site-navbar__auth">
+          <a class="site-navbar__link" href="/signup">Sign up</a>
+          <a class="site-navbar__link" href="/login">Log in</a>
+        </div>
+      <% } else { %>
+        <div class="site-navbar__menu">
+          <button type="button" class="site-navbar__menu-trigger" onclick="toggleDropdown(event)">
+            <i class="fa-solid fa-bars"></i>
+            <span class="site-navbar__avatar"><%= currentUser.username.charAt(0).toUpperCase() %></span>
+          </button>
+          <div class="site-navbar__dropdown" id="userDropdown">
+            <a href="/listings/new">Add listing</a>
+            <a href="/reviews">Reviews</a>
+            <div class="site-navbar__divider"></div>
+            <a href="/logout">Log out</a>
           </div>
         </div>
       <% } %>
@@ -185,18 +244,20 @@
 </nav>
 
 <script>
-function toggleDropdown() {
-  const dropdown = document.getElementById('userDropdown');
-  dropdown.classList.toggle('show');
-}
-
-// Close dropdown when clicking outside
-document.addEventListener('click', function(event) {
-  const userMenu = document.querySelector('.user-menu');
-  const dropdown = document.getElementById('userDropdown');
-  
-  if (!userMenu.contains(event.target)) {
-    dropdown.classList.remove('show');
+  function toggleDropdown(event) {
+    event.stopPropagation();
+    const dropdown = document.getElementById("userDropdown");
+    if (dropdown) {
+      dropdown.classList.toggle("show");
+    }
   }
-});
+
+  document.addEventListener("click", function (event) {
+    const menu = document.querySelector(".site-navbar__menu");
+    const dropdown = document.getElementById("userDropdown");
+
+    if (menu && dropdown && !menu.contains(event.target)) {
+      dropdown.classList.remove("show");
+    }
+  });
 </script>

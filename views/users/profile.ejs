@@ -1,0 +1,155 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+<style>
+  .profile-page {
+    padding: 3rem 0 4rem;
+    background: linear-gradient(180deg, #f7f7f7 0%, #ffffff 100%);
+  }
+
+  .profile-shell {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .profile-hero,
+  .profile-section {
+    background: #ffffff;
+    border-radius: 1.75rem;
+    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.1);
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .profile-hero__top {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .profile-avatar {
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: 999px;
+    background: #ff385c;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.6rem;
+  }
+
+  .profile-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .profile-card {
+    border: 1px solid #ebebeb;
+    border-radius: 1.25rem;
+    padding: 1rem;
+  }
+
+  .profile-card img {
+    width: 100%;
+    aspect-ratio: 1.2 / 1;
+    object-fit: cover;
+    border-radius: 1rem;
+    margin-bottom: 0.8rem;
+  }
+
+  @media (max-width: 768px) {
+    .profile-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<div class="profile-page">
+  <div class="profile-shell">
+    <section class="profile-hero" data-animate="zoom-in">
+      <div class="profile-hero__top">
+        <div class="profile-avatar"><%= user.username.charAt(0).toUpperCase() %></div>
+        <div>
+          <h1 class="mb-1">Hi, <%= user.username %></h1>
+          <p class="text-muted mb-0"><%= user.email %></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="profile-section" data-animate="fade-up">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h4 mb-0">Saved favorites</h2>
+        <span class="text-muted"><%= user.favorites.length %> saved</span>
+      </div>
+
+      <% if (user.favorites.length > 0) { %>
+        <div class="profile-grid">
+          <% user.favorites.forEach((listing) => { %>
+            <a href="/listings/<%= listing._id %>" class="text-decoration-none text-dark">
+              <div class="profile-card hover-float">
+                <img src="<%= listing.image.url %>" alt="<%= listing.title %>">
+                <h3 class="h6 mb-1"><%= listing.title %></h3>
+                <p class="text-muted mb-1"><%= listing.location %>, <%= listing.country %></p>
+                <strong>$<%= Number(listing.price).toLocaleString("en-US") %> / night</strong>
+              </div>
+            </a>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p class="text-muted mb-0">You have no saved favorites yet.</p>
+      <% } %>
+    </section>
+
+    <section class="profile-section" data-animate="fade-up" style="--reveal-delay: 0.06s;">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h4 mb-0">My bookings</h2>
+        <a href="/bookings" class="text-decoration-none">View all</a>
+      </div>
+
+      <% if (myBookings.length > 0) { %>
+        <div class="profile-grid">
+          <% myBookings.forEach((booking) => { %>
+            <div class="profile-card">
+              <h3 class="h6 mb-1"><%= booking.listing.title %></h3>
+              <p class="text-muted mb-1"><%= booking.listing.location %>, <%= booking.listing.country %></p>
+              <p class="mb-1">
+                <%= new Date(booking.checkIn).toLocaleDateString() %> -
+                <%= new Date(booking.checkOut).toLocaleDateString() %>
+              </p>
+              <strong>$<%= Number(booking.totalPrice).toLocaleString("en-US") %> total</strong>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p class="text-muted mb-0">No bookings yet.</p>
+      <% } %>
+    </section>
+
+    <section class="profile-section" data-animate="fade-up" style="--reveal-delay: 0.12s;">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h4 mb-0">Hosted listings</h2>
+        <a href="/listings/new" class="btn btn-outline-dark rounded-pill">Add listing</a>
+      </div>
+
+      <% if (myListings.length > 0) { %>
+        <div class="profile-grid">
+          <% myListings.forEach((listing) => { %>
+            <a href="/listings/<%= listing._id %>" class="text-decoration-none text-dark">
+              <div class="profile-card hover-float">
+                <img src="<%= listing.image.url %>" alt="<%= listing.title %>">
+                <h3 class="h6 mb-1"><%= listing.title %></h3>
+                <p class="text-muted mb-1"><%= listing.location %>, <%= listing.country %></p>
+                <p class="mb-0">Up to <%= listing.maxGuests || 4 %> guests</p>
+              </div>
+            </a>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p class="text-muted mb-0">You are not hosting any listings yet.</p>
+      <% } %>
+    </section>
+  </div>
+</div>

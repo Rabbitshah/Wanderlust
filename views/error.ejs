@@ -1,8 +1,55 @@
-<% layout("/layouts/boilerplate") %>
+<% layout("/layouts/boilerplate.ejs") %>
 
-<div class="row mt-3">
-  <div class="alert alert-danger col-6 offset-3" role="alert">
-    <!-- <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg> -->
-    <p class="alert-heading"><%= message %></p>
+<style>
+  .not-found-page {
+    min-height: calc(100vh - 5rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    background: linear-gradient(180deg, #f7f7f7 0%, #ffffff 100%);
+    text-align: center;
+  }
+
+  .not-found-wrap h1 {
+    font-size: clamp(4.5rem, 12vw, 8rem);
+    line-height: 1;
+    color: #ff385c;
+    font-weight: 800;
+    margin: 0 0 1rem;
+  }
+
+  .not-found-wrap h2 {
+    margin: 0 0 0.75rem;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #222222;
+  }
+
+  .not-found-wrap p {
+    max-width: 560px;
+    margin: 0 auto 2rem;
+    color: #717171;
+    font-size: 1.15rem;
+  }
+
+  .not-found-wrap .btn {
+    border-radius: 1rem;
+    padding: 0.95rem 1.4rem;
+    font-weight: 700;
+    background: #ff385c;
+    border-color: #ff385c;
+  }
+</style>
+
+<div class="not-found-page">
+  <div class="not-found-wrap" data-animate="zoom-in">
+    <h1>404</h1>
+    <h2>Page not found</h2>
+    <p><%= message %> Sorry, we couldn't find the page you're looking for. Let's get you back on track.</p>
+    <a href="/listings" class="btn btn-primary">
+      <i class="fa-solid fa-house"></i>
+      Back to Home
+    </a>
   </div>
 </div>

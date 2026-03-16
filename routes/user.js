@@ -3,7 +3,11 @@ const router = express.Router({});
 const User = require("../models/user.js");
 const passport = require("passport");
 const wrapAsync = require("../utils/wrapAsync.js");
-const { saveRedirectUrl } = require("../middlewares.js");
+const {
+  saveRedirectUrl,
+  isLoggedIn,
+  isBookingOwner,
+} = require("../middlewares.js");
 
 const userController = require("../controllers/users.js");
 
@@ -25,5 +29,13 @@ router
   );
 
 router.get("/logout", userController.logoutPage);
+router.get("/profile", isLoggedIn, wrapAsync(userController.profilePage));
+router.get("/bookings", isLoggedIn, wrapAsync(userController.bookingsPage));
+router.delete(
+  "/bookings/:bookingId",
+  isLoggedIn,
+  isBookingOwner,
+  wrapAsync(require("../controllers/listings.js").cancelBooking)
+);
 
 module.exports = router;

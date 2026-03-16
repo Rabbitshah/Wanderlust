@@ -1,19 +1,143 @@
 <% layout("/layouts/boilerplate.ejs") %>
 
-<div class="row mt-3">
-    <h1 class="col-6 offset-3">Login</h1>
-  <div class="col-6 offset-3">
-    <form action="/login" method="post" class="needs-validation" novalidate>
-      <div class="mb-3">
+<style>
+  .auth-page {
+    min-height: calc(100vh - 5rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    background: linear-gradient(180deg, #f7f7f7 0%, #ffffff 100%);
+  }
+
+  .auth-card {
+    width: 100%;
+    max-width: 520px;
+    background: #ffffff;
+    border-radius: 2rem;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+    padding: 2.5rem;
+  }
+
+  .auth-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    margin-bottom: 1.5rem;
+  }
+
+  .auth-brand__icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 999px;
+    border: 2px solid #ff385c;
+    color: #ff385c;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .auth-brand__text {
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: #222222;
+  }
+
+  .auth-headline {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .auth-headline h1 {
+    margin: 0 0 0.45rem;
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    color: #222222;
+  }
+
+  .auth-headline p {
+    margin: 0;
+    color: #717171;
+  }
+
+  .auth-form .form-label {
+    font-weight: 600;
+    color: #222222;
+    margin-bottom: 0.55rem;
+  }
+
+  .auth-form .form-control {
+    border-radius: 1rem;
+    padding: 0.95rem 1rem;
+  }
+
+  .auth-meta {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1.5rem;
+  }
+
+  .auth-meta a,
+  .auth-switch a {
+    color: #ff385c;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .auth-submit {
+    width: 100%;
+    border: none;
+    background: #ff385c;
+    color: #ffffff;
+    border-radius: 1rem;
+    padding: 1rem 1.25rem;
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+
+  .auth-submit:hover {
+    background: #e31c5f;
+  }
+
+  .auth-switch {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: #717171;
+  }
+</style>
+
+<div class="auth-page">
+  <div class="auth-card" data-animate="zoom-in">
+    <div class="text-center">
+      <a href="/listings" class="auth-brand">
+        <span class="auth-brand__icon">
+          <i class="fa-regular fa-compass"></i>
+        </span>
+        <span class="auth-brand__text">Wanderlust</span>
+      </a>
+    </div>
+
+    <div class="auth-headline">
+      <h1>Welcome back</h1>
+      <p>Log in to your account</p>
+    </div>
+
+    <form action="/login" method="post" class="auth-form needs-validation" novalidate>
+      <div class="mb-4">
         <label for="username" class="form-label">Username</label>
         <input
           name="username"
           type="text"
           id="username"
           class="form-control"
+          placeholder="Enter your username"
           required
         />
       </div>
+
       <div class="mb-3">
         <label for="password" class="form-label">Password</label>
         <input
@@ -21,10 +145,21 @@
           type="password"
           id="password"
           class="form-control"
+          placeholder="Enter your password"
           required
-        /> 
+        />
       </div>
-      <button class="btn btn-success">Login</button>
+
+      <div class="auth-meta">
+        <a href="#">Forgot password?</a>
+      </div>
+
+      <button class="auth-submit" type="submit">Log In</button>
     </form>
+
+    <div class="auth-switch">
+      Don't have an account?
+      <a href="/signup">Sign up</a>
+    </div>
   </div>
 </div>

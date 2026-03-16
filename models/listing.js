@@ -12,9 +12,35 @@ const listingSchema = new Schema({
     url: String,
     filename: String,
   },
+  images: [
+    {
+      url: String,
+      filename: String,
+    },
+  ],
   price: Number,
   location: String,
   country: String,
+  maxGuests: {
+    type: Number,
+    default: 4,
+    min: 1,
+  },
+  bedrooms: {
+    type: Number,
+    default: 2,
+    min: 0,
+  },
+  bathrooms: {
+    type: Number,
+    default: 2,
+    min: 0,
+  },
+  amenities: [
+    {
+      type: String,
+    },
+  ],
   rating: {
     type: Number,
     default: 5.0,
@@ -56,6 +82,12 @@ const listingSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
+  bookings: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Booking",
+    },
+  ],
   geometry: {
     type: {
       type: String, // Don't do `{ location: { type: String } }`
