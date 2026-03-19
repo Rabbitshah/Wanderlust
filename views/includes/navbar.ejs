@@ -214,8 +214,8 @@
     </a>
 
     <div class="site-navbar__tabs">
-      <a class="site-navbar__tab is-active" href="/listings">Stays</a>
-      <a class="site-navbar__tab" href="#">Experiences</a>
+      <a class="site-navbar__tab <%= currentPath && currentPath.startsWith('/listings') ? 'is-active' : '' %>" href="/listings">Stays</a>
+      <a class="site-navbar__tab <%= currentPath === '/experiences' ? 'is-active' : '' %>" href="/experiences">Experiences</a>
     </div>
 
     <div class="site-navbar__actions">

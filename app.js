@@ -10,11 +10,13 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const ExpressError = require("./utils/expressError.js");
 const session = require("express-session");
-const MongoStore = require("connect-mongo");
+const MongoStore = require("connect-mongo").default || require("connect-mongo");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
+const Listing = require("./models/listing.js");
+const Review = require("./models/review.js");
 
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
@@ -35,7 +37,7 @@ async function main() {
   await mongoose.connect(dbUrl);
 }
 
-app.set("view engine ", "ejs");
+app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
@@ -50,7 +52,7 @@ const store = MongoStore.create({
   },
 });
 
-store.on("error", () => {
+store.on("error", (err) => {
   console.log("Store Error", err);
 });
 
@@ -100,12 +102,29 @@ app.use((req, res, next) => {
 // });
 
 app.get("/", (req, res) => res.redirect("/listings"));
+app.get("/experiences", async (req, res, next) => {
+  try {
+    const featuredReviews = await Review.find({})
+      .populate("author", "username")
+      .populate("listing", "title location country image")
+      .sort({ isFeatured: -1, rating: -1, createdAt: -1 })
+      .limit(6);
+
+    const curatedListings = await Listing.find({})
+      .sort({ rating: -1, reviewCount: -1 })
+      .limit(6);
+
+    res.render("experiences/index.ejs", { featuredReviews, curatedListings });
+  } catch (err) {
+    next(err);
+  }
+});
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
 app.use("/reviews", reviewRouter);
 app.use("/", userRouter);
 
-app.all("*", (req, res, next) => {
+app.all("/{*splat}", (req, res, next) => {
   next(new ExpressError(404, "Page Not Found!"));
 });
 

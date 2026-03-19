@@ -72,9 +72,8 @@ const reviewSchema = new Schema({
 });
 
 // Update the updatedAt field before saving
-reviewSchema.pre("save", function (next) {
+reviewSchema.pre("save", function () {
   this.updatedAt = Date.now();
-  next();
 });
 
 // Virtual for helpful count

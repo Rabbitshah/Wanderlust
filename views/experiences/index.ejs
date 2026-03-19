@@ -1,0 +1,205 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+<style>
+  .experiences-page {
+    background: linear-gradient(180deg, #f7f7f7 0%, #ffffff 100%);
+    min-height: 100vh;
+  }
+
+  .experiences-shell {
+    max-width: 2520px;
+    margin: 0 auto;
+    padding: 0 2rem 4rem;
+  }
+
+  .experiences-hero {
+    padding: 4rem 0 3rem;
+    text-align: center;
+  }
+
+  .experiences-hero h1 {
+    margin: 0 0 0.75rem;
+    font-size: clamp(2.8rem, 6vw, 4.8rem);
+    line-height: 1.05;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    color: #222222;
+  }
+
+  .experiences-hero p {
+    max-width: 720px;
+    margin: 0 auto;
+    color: #717171;
+    font-size: 1.2rem;
+  }
+
+  .experiences-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .experience-panel {
+    background: #ffffff;
+    border-radius: 2rem;
+    padding: 2rem;
+    box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
+  }
+
+  .experience-panel h2 {
+    margin: 0 0 1rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #222222;
+  }
+
+  .experience-highlight {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .experience-card {
+    border: 1px solid #ebebeb;
+    border-radius: 1.35rem;
+    overflow: hidden;
+    background: #ffffff;
+  }
+
+  .experience-card img {
+    width: 100%;
+    height: 210px;
+    object-fit: cover;
+  }
+
+  .experience-card__body {
+    padding: 1rem;
+  }
+
+  .experience-card__meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+  }
+
+  .experience-review {
+    border: 1px solid #ebebeb;
+    border-radius: 1.25rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background: #ffffff;
+  }
+
+  .experience-review:last-child {
+    margin-bottom: 0;
+  }
+
+  .experience-review__top {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .experience-review__name {
+    font-weight: 700;
+    color: #222222;
+  }
+
+  .experience-review__listing {
+    color: #717171;
+    font-size: 0.92rem;
+  }
+
+  .experience-empty {
+    color: #717171;
+    margin: 0;
+  }
+
+  @media (max-width: 992px) {
+    .experiences-shell {
+      padding: 0 1.25rem 3rem;
+    }
+
+    .experiences-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .experience-highlight {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<div class="experiences-page">
+  <div class="experiences-shell">
+    <section class="experiences-hero">
+      <h1 data-animate="fade-up">Discover memorable experiences</h1>
+      <p data-animate="fade-up" style="--reveal-delay: 0.08s;">
+        Explore guest-loved stays, standout reviews, and inspiring places that feel like more than just a booking.
+      </p>
+    </section>
+
+    <section class="experiences-grid">
+      <div class="experience-panel" data-animate="fade-up">
+        <h2>Curated places</h2>
+        <% if (curatedListings.length > 0) { %>
+          <div class="experience-highlight">
+            <% curatedListings.forEach((listing, index) => { %>
+              <a href="/listings/<%= listing._id %>" class="text-decoration-none text-dark" data-animate="fade-up" style="--reveal-delay: <%= Math.min(index * 0.06, 0.2) %>s;">
+                <article class="experience-card hover-float">
+                  <img src="<%= listing.image.url %>" alt="<%= listing.title %>">
+                  <div class="experience-card__body">
+                    <div class="experience-card__meta">
+                      <span><%= listing.location %>, <%= listing.country %></span>
+                      <span><i class="fa-solid fa-star"></i> <%= listing.rating ? listing.rating.toFixed(1) : '5.0' %></span>
+                    </div>
+                    <p class="mb-2"><%= listing.title %></p>
+                    <strong>$<%= Number(listing.price).toLocaleString("en-US") %> / night</strong>
+                  </div>
+                </article>
+              </a>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <p class="experience-empty">Curated experiences will show up here once listings are added.</p>
+        <% } %>
+      </div>
+
+      <div class="experience-panel" data-animate="fade-left">
+        <h2>What guests are saying</h2>
+        <% if (featuredReviews.length > 0) { %>
+          <% featuredReviews.forEach((review, index) => { %>
+            <article class="experience-review hover-float" data-animate="fade-up" style="--reveal-delay: <%= Math.min(index * 0.05, 0.2) %>s;">
+              <div class="experience-review__top">
+                <div>
+                  <div class="experience-review__name"><%= review.author.username %></div>
+                  <div class="experience-review__listing">
+                    <% if (review.listing) { %>
+                      <%= review.listing.title %> · <%= review.listing.location %>, <%= review.listing.country %>
+                    <% } else { %>
+                      Wanderlust guest
+                    <% } %>
+                  </div>
+                </div>
+                <div class="fw-semibold">
+                  <i class="fa-solid fa-star"></i> <%= review.rating %>.0
+                </div>
+              </div>
+              <% if (review.title) { %>
+                <div class="fw-semibold mb-2"><%= review.title %></div>
+              <% } %>
+              <p class="mb-0 text-muted"><%= review.comment %></p>
+            </article>
+          <% }) %>
+          <a href="/reviews" class="btn btn-outline-dark rounded-pill mt-3">Browse all reviews</a>
+        <% } else { %>
+          <p class="experience-empty">Featured guest experiences will appear here once reviews are available.</p>
+        <% } %>
+      </div>
+    </section>
+  </div>
+</div>
